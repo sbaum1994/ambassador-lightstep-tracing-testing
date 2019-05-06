@@ -2,8 +2,7 @@
 # Pretty straightforward, note this is pointing to the LightStep SaaS
 # grpc-plain port (8080) and that the access token file is being set
 
-# Note relying on LightStep SaaS is recommended for low-throughput traffic
-# and is less performant than internally hosted collectors
+# Note relying on LightStep SaaS is less performant than internally hosted collectors
 ---
 apiVersion: v1
 kind: Service
