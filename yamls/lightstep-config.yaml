@@ -1,0 +1,10 @@
+# ConfigMap defining the lightstep access token
+# This corresponds to the lightstep project being reported to
+---
+
+kind: ConfigMap
+apiVersion: v1
+metadata:
+    name: lightstep-config
+data:
+    lightstep_access_token.txt: <lightstep access token>

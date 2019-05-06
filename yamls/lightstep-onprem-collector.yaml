@@ -1,0 +1,118 @@
+# LightStep on-prem collector deployment and service
+#
+# The deployment is a standard example of a LightStep satellite setup
+# includes the relevant ports (both http and grpc are bing exposed,
+# though with LightStep's latest collector all ports accept all traffic types
+# so this isn't really necessary, you technically only need to expose one port)
+# as well as the diagnostics port at 8000 and admin port is used 
+# for ready check
+
+# Note there is no bytes_per_project defined so the default will be used,
+# this is required for a production deployment
+
+# The service exposes the collector ports for local reporting at various
+# paths as well as the tracing service definition which ambassador picks up,
+# note the access_token file location is included
+
+# Visit the diagnostics page at <ambassador ip>/diag-ls/diagnostics
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lightstep-collector
+  annotations:
+    getambassador.io/config: |
+      ---
+      apiVersion: ambassador/v1
+      kind: TracingService
+      name: tracing
+      service: lightstep-collector:8182
+      driver: lightstep
+      config: {
+          access_token_file: /config/lightstep_access_token.txt
+      }
+      ---
+      apiVersion: ambassador/v1
+      kind:  Mapping
+      name:  lightstep-collector-mapping
+      prefix: /ingress-ls/
+      service: lightstep-collector:8181
+      ---
+      apiVersion: ambassador/v1
+      kind:  Mapping
+      name:  lightstep-collector-grpc-mapping
+      prefix: /ingress-ls-grpc/
+      service: lightstep-collector:8182
+      grpc: True
+      ---
+      apiVersion: ambassador/v1
+      kind:  Mapping
+      name:  lightstep-diagnostics-mapping
+      prefix: /diag-ls/
+      service: lightstep-collector:8000
+spec:
+  selector:
+    app: lightstep-collector
+  ports:
+  - port: 8000
+    protocol: TCP
+    name: diag-ls
+    targetPort: diag-ls
+  - port: 8181
+    protocol: TCP
+    name: ingress-ls
+    targetPort: ingress-ls
+  - port: 8182
+    protocol: TCP
+    name: ingress-ls-grpc
+    targetPort: ingress-ls-grpc
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: lightstep-collector
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: lightstep-collector
+    spec:
+      containers:
+      - name: lightstep-collector
+        image: lightstep/collector:latest
+        env:
+        - name: COLLECTOR_API_KEY
+          value: <lightstep api key>
+        - name: COLLECTOR_POOL
+          value: "stephanie-test" # example pool name
+        - name: COLLECTOR_GUID
+          value: "stephanie.local" # example guid
+        - name: COLLECTOR_BABYSITTER_PORT
+          value: "8000"
+        - name: COLLECTOR_ADMIN_PLAIN_PORT
+          value: "8180"
+        - name: COLLECTOR_HTTP_PLAIN_PORT
+          value: "8181"
+        - name: COLLECTOR_GRPC_PLAIN_PORT
+          value: "8182"
+        ports:
+        - name: diag-ls
+          containerPort: 8000
+        - name: ingress-ls
+          containerPort: 8181
+        - name: ingress-ls-grpc
+          containerPort: 8182
+        readinessProbe:
+          httpGet:
+            path: /_ready
+            port: 8180
+          initialDelaySeconds: 30
+          periodSeconds: 3
+        resources:
+          limits:
+            cpu: "0.1"
+            memory: 100Mi
+          

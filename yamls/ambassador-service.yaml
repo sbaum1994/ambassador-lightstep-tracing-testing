@@ -1,0 +1,16 @@
+# For exposing ambassador when running locally in Minikube
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ambassador
+spec:
+  type: NodePort
+  ports:
+  - name: http
+    port: 8088
+    targetPort: 8080
+    nodePort: 30036
+    protocol: TCP
+  selector:
+    service: ambassador
