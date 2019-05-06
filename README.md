@@ -22,3 +22,5 @@ Then:
 - curl httpbin at `<ambassador ip>/httpbin/` a few times and check LightStep Explorer for spans
 
 See individual yamls for more commentary.
+
+Note this is only testing the super happy case. See the Ambassador github for docs on troubleshooting. I troubleshoot(ed? troubleshot?) mostly by enabling ambassador debugging, following along the ambassador pod logs, and adding logging to dump out the envoy configs being generated.
