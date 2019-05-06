@@ -1,5 +1,7 @@
+# NOTE: Fill in <lightstep api key>
+
 # LightStep on-prem collector deployment and service
-#
+
 # The deployment is a standard example of a LightStep satellite setup
 # includes the relevant ports (both http and grpc are bing exposed,
 # though with LightStep's latest collector all ports accept all traffic types

@@ -1,3 +1,5 @@
+# NOTE: Fill in <your local image>
+
 # This modified ambassador-rbac getting started file only 
 # deploys 1 replica for debugging purposes (see how to dump the envoy.json
 # being generated in the ambassador troubleshooting docs) and includes

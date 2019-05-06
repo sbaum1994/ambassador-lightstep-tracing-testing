@@ -1,3 +1,5 @@
+# NOTE: Fill in <lightstep access token>
+
 # ConfigMap defining the lightstep access token
 # This corresponds to the lightstep project being reported to
 ---
