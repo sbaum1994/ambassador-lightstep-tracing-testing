@@ -15,7 +15,7 @@ Testing SaaS:
 - `kubectl apply -f lightstep-saas-collector.yaml`
 
 Testing on-prem:
-- `kubectl apply -f apply lightstep-onprem-collector.yaml` (make sure to add your LightStep Satellite API key)
+- `kubectl apply -f lightstep-onprem-collector.yaml` (make sure to add your LightStep Satellite API key)
 
 Then:
 - restart ambassador (ex. delete the single pod that's running, ambassador needs to be restarted to enable tracing)
