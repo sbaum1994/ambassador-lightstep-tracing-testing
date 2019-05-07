@@ -6,9 +6,9 @@ Pre-reqs:
 
 Steps:
 - `kubectl apply -f ambassador-rbac-modified.yaml` (with image set to local and the right image tag)
-- `kubectl apply -f apply ambassador-service.yaml`
-- `kubectl apply -f apply lightstep-config.yaml` (with access token added in the file)
-- `kubectl apply -f apply httpbin.yaml`
+- `kubectl apply -f ambassador-service.yaml`
+- `kubectl apply -f lightstep-config.yaml` (with access token added in the file)
+- `kubectl apply -f httpbin.yaml`
 - check set up works so far with `curl <ambassador ip>/httpbin/ip` (should get response)
 
 Testing SaaS:
